@@ -99,3 +99,61 @@ insert into emprestimos( cliente_id, livro_id, data_emprestimo, data_prevista_de
 (4, 16, '2026-11-01', '2026-11-15', NULL),   
 (2, 1, '2026-11-02', '2026-11-16', NULL),          
 
+-- Livros com nome do autor, ano publicação
+select l.titulo, a.nome as autores, l.genero, l.ano_publicacao 
+from livros l
+inner join autores a
+	on a.id=l.autor_id
+order by l.genero asc
+
+-- Empréstimos ativos: cliente, livro e prazo
+--Ativo = ainda não devolvido(data_devolucao vazia)
+select c.nome as cliente, l.titulo as livro, e.data_emprestimo, e.data_prevista_devolucao
+from emprestimos e
+inner join clientes c
+	on c.id = e.cliente_id
+inner join livros l
+	on l.id = e.livro_id
+	where e.data_devolucao is null
+order by c.nome asc
+
+
+-- Quantidade de livros por autor (LEFT JOIN + GROUP BY)
+-- LEFT JOIN: Um autor sem livros aparece com total de 0, em vez de sumir da lista
+select a.nome as autore, count(l.id) as total_livros
+from autores a
+left join livros l
+	on l.autor_id = a.id
+group by a.id, a.nome
+order by total_livros desc, a.nome
+	
+--Emprestimos atrasados: ativos com a data precista já vencida
+--current date - data = quantidade de dias atraso
+select c.nome as cliente, l.titulo as livro, e.data_prevista_devolucao,
+current_date - e.data_prevista_devolucao as dias_atraso
+from emprestimos e
+inner join clientes c
+	on c.id = e.cliente_id
+inner join livros l
+	on l.id = e.livro_id
+where e.data_devolucao is null and e.data_prevista_devolucao < current_date
+order by dias_atraso desc
+
+
+-- Clientes que nunca fizeram emprestimo
+-- left join + is null: quem não tem correspondencia fica com e.id vazio
+select c.nome, c.email
+from clientes c
+left join emprestimos e
+	on e.cliente_id = c.id
+where e.id is null
+
+
+-- Livros mais emprestados
+select l.titulo, count(e.id) as total_emprestimos
+from livros l
+inner join emprestimos e
+	on e.livro_id = l.id
+group by l.id, l.titulo
+order by total_emprestimos desc, l.titulo
+limit 3
