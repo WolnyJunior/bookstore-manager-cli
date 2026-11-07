@@ -1,4 +1,4 @@
-import { Pool } from "pg";
+import { Pool } from "pg"
 import { env } from "./env"
 
 export const pool = new Pool({
@@ -6,7 +6,7 @@ export const pool = new Pool({
     port: env.db.port,
     database: env.db.name,
     user: env.db.user,
-    password: env.db.password
+    password: env.db.password,
 })
 
 export async function testConnection(): Promise<void> {

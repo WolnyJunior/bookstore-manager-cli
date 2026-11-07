@@ -1,4 +1,4 @@
-import {pool, testConnection} from "./config/database"
+import { pool, testConnection } from "./config/database"
 
 async function start(): Promise<void> {
     try {
