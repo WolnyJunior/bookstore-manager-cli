@@ -46,17 +46,11 @@ cp .env.example .env   # Para Linux/Mac:
 Erros esperados são lançados em `AppError(mensagem, statusCode)` e o middleware `errorHandler` responde sempre em JSON:
 
 ## Banco de dados
-O projeto usa Sequelize com PostgreSQL. As alterações no banco são feitas por migrations
-(`src/database/migrations`, em javaScript por exigência do `sequelize-cli`)
-e os models ficam em `src/models`(TypeScript).
-Para alterar uma tabela, crie uma nova migration: não edite uma já executada.
+```sql
+CREATE DATABASE bookstore
+```
+execute o  arquivo `database/scrip.sql` no banco `bookstore`(pelo Query Tool do pgAdmin)
 
-## Testes
-Os testes usam Vitest e Supertest e ficam ao lado do código, em arquivos `*.test.ts`
-Eles **não precisam de banco de dados**: cobrem validações, rotas, autenticação e permissões.
-As variáveis de ambiente dos testes ficam em `vitest.config.mts`.
-
-O build (`npm run build`) usa `tsconfig.build.json`, que excluir os testes do `dist/`
 
 ## Padrão de código
 O estilo é definido pelo Prettier(`.prettierrc.json`) e as boas práticas pelo `ESLint`
