@@ -9,7 +9,7 @@ export interface NovoLivro {
 
 export interface Livro extends NovoLivro {
     id: number
-    quandidade_disponivel: number
+    quantidade_disponivel: number
 }
 
 export interface LivroDetalhado extends Livro {

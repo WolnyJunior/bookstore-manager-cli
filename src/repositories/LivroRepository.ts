@@ -5,9 +5,9 @@ const COLUNAS = `id, titulo, genero, isbn, ano_publicacao, quantidade_total, qua
 
 const SELECT_DETALHADO = `
     SELECT  l.id, l.titulo, l.genero, l.isbn, l.ano_publicacao, l.quantidade_total,
-            l.quantidade_disponivel, l.autor.id, a.nome as autor_nome
+            l.quantidade_disponivel, l.autor_id, a.nome as autor_nome
     FROM livros l
-    JOIN autores a
+    INNER JOIN autores a
         ON a.id = l.autor_id    `
 
 export class LivroRepository {
@@ -16,7 +16,14 @@ export class LivroRepository {
             `INSERT INTO livros (titulo, genero, isbn, ano_publicacao, quantidade_total, quantidade_disponivel, autor_id)
             VALUES($1, $2, $3, $4, $5, $5, $6)
             RETURNING ${COLUNAS}`,
-            [dados.titulo, dados.genero, dados.ano_publicacao, dados.quantidade_total, dados.autor_id]
+            [
+                dados.titulo,
+                dados.genero,
+                dados.isbn,
+                dados.ano_publicacao,
+                dados.quantidade_total,
+                dados.autor_id
+            ]
         )
 
         const livro = resultado.rows[0]
@@ -44,11 +51,20 @@ export class LivroRepository {
                 genero = $2,
                 isbn = $3,
                 ano_publicacao = $4,
-                quantidade_disponivel = $5::intereger - (quantidade_total - quantidade_disponivel),
+                quantidade_disponivel = $5::integer - (quantidade_total - quantidade_disponivel),
                 quantidade_total = $5,
                 autor_id = $6
-                RETURNING ${COLUNAS}`,
-            [dados.titulo, dados.genero, dados.isbn, dados.ano_publicacao, dados.quantidade_total, dados.autor_id, id]
+            WHERE id = $7
+            RETURNING ${COLUNAS}`,
+            [
+                dados.titulo, 
+                dados.genero, 
+                dados.isbn, 
+                dados.ano_publicacao,
+                dados.quantidade_total, 
+                dados.autor_id, 
+                id
+            ]
         )
         return resultado.rows[0] ?? null
     }
