@@ -1,5 +1,5 @@
-import { pool } from "../config/database";
-import { Livro, LivroDetalhado, NovoLivro } from "../models/Livro";
+import { pool } from "../config/database"
+import { Livro, LivroDetalhado, NovoLivro } from "../models/Livro"
 
 const COLUNAS = `id, titulo, genero, isbn, ano_publicacao, quantidade_total, quantidade_disponivel, autor_id`
 
@@ -22,8 +22,8 @@ export class LivroRepository {
                 dados.isbn,
                 dados.ano_publicacao,
                 dados.quantidade_total,
-                dados.autor_id
-            ]
+                dados.autor_id,
+            ],
         )
 
         const livro = resultado.rows[0]
@@ -40,7 +40,9 @@ export class LivroRepository {
     }
 
     async buscarLivroPorId(id: number): Promise<LivroDetalhado | null> {
-        const resultado = await pool.query<LivroDetalhado>(`${SELECT_DETALHADO} WHERE l.id = $1`, [id])
+        const resultado = await pool.query<LivroDetalhado>(`${SELECT_DETALHADO} WHERE l.id = $1`, [
+            id,
+        ])
         return resultado.rows[0] ?? null
     }
 
@@ -57,14 +59,14 @@ export class LivroRepository {
             WHERE id = $7
             RETURNING ${COLUNAS}`,
             [
-                dados.titulo, 
-                dados.genero, 
-                dados.isbn, 
+                dados.titulo,
+                dados.genero,
+                dados.isbn,
                 dados.ano_publicacao,
-                dados.quantidade_total, 
-                dados.autor_id, 
-                id
-            ]
+                dados.quantidade_total,
+                dados.autor_id,
+                id,
+            ],
         )
         return resultado.rows[0] ?? null
     }

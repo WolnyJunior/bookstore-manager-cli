@@ -1,5 +1,5 @@
-import { LivroService } from "../services/LivroService";
-import { Livro, LivroDetalhado, NovoLivro } from "../models/Livro";
+import { LivroService } from "../services/LivroService"
+import { Livro, LivroDetalhado, NovoLivro } from "../models/Livro"
 
 export interface EntradaLivro {
     titulo: string
@@ -11,7 +11,7 @@ export interface EntradaLivro {
 }
 
 export class LivroController {
-    constructor(private readonly livroService: LivroService) { }
+    constructor(private readonly livroService: LivroService) {}
 
     cadastrar(entrada: EntradaLivro): Promise<Livro> {
         return this.livroService.cadastrarLivro(this.converter(entrada))
@@ -33,15 +33,15 @@ export class LivroController {
         return this.livroService.deletarLivro(Number(id))
     }
 
-
     private converter(entrada: EntradaLivro): NovoLivro {
         return {
             titulo: entrada.titulo,
             genero: entrada.genero,
             isbn: entrada.isbn,
-            ano_publicacao: entrada.ano_publicacao.trim() === "" ? null : Number(entrada.ano_publicacao),
+            ano_publicacao:
+                entrada.ano_publicacao.trim() === "" ? null : Number(entrada.ano_publicacao),
             quantidade_total: Number(entrada.quantidade_total),
-            autor_id: Number(entrada.autor_id)
+            autor_id: Number(entrada.autor_id),
         }
     }
 }

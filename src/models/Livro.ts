@@ -3,7 +3,7 @@ export interface NovoLivro {
     genero: string
     isbn: string
     ano_publicacao: number | null
-    quantidade_total: number 
+    quantidade_total: number
     autor_id: number
 }
 

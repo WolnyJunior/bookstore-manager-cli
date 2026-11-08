@@ -1,10 +1,10 @@
-import { LivroController } from "../controllers/LivroController";
-import { LivroDetalhado } from "../models/Livro";
-import { AppError } from "../utils/AppError";
-import { perguntar } from "../utils/prompt";
+import { LivroController } from "../controllers/LivroController"
+import { LivroDetalhado } from "../models/Livro"
+import { AppError } from "../utils/AppError"
+import { perguntar } from "../utils/prompt"
 
 export class LivroMenu {
-    constructor(private readonly livroController: LivroController) { }
+    constructor(private readonly livroController: LivroController) {}
 
     async exibirMenuLivro(): Promise<void> {
         while (true) {
@@ -17,8 +17,7 @@ export class LivroMenu {
             console.log("0 - Voltar")
 
             const opcao = await perguntar("Escolha uma opção: ")
-            if (opcao === "0")
-                return
+            if (opcao === "0") return
             await this.executarSeguro(opcao)
         }
     }
@@ -26,10 +25,9 @@ export class LivroMenu {
     private async executarSeguro(opcao: string): Promise<void> {
         try {
             await this.executar(opcao)
-
         } catch (erro) {
             if (erro instanceof AppError) {
-                console.log((`\n ${erro.message}`))
+                console.log(`\n ${erro.message}`)
             } else {
                 console.error("\nErro inesperado:", erro)
             }
@@ -38,7 +36,7 @@ export class LivroMenu {
 
     private async executar(opcao: string): Promise<void> {
         switch (opcao) {
-           case "1":
+            case "1":
                 return this.cadastrar()
             case "2":
                 return this.listar()
@@ -62,7 +60,14 @@ export class LivroMenu {
         const quantidade_total = await perguntar("Quantidade de exemplares.")
         const autor_id = await perguntar("ID do autor.")
 
-        const livro = await this.livroController.cadastrar({ titulo, genero, isbn, ano_publicacao, quantidade_total, autor_id })
+        const livro = await this.livroController.cadastrar({
+            titulo,
+            genero,
+            isbn,
+            ano_publicacao,
+            quantidade_total,
+            autor_id,
+        })
         console.log(`\nLivro ${livro.titulo} cadastrado com sucesso.`)
     }
     private async listar(): Promise<void> {
@@ -86,11 +91,24 @@ export class LivroMenu {
         const titulo = await perguntar("Título: ", atualizarLivro.titulo)
         const genero = await perguntar("Gênero: ", atualizarLivro.genero)
         const isbn = await perguntar("ISBN: ", atualizarLivro.isbn)
-        const ano_publicacao = await perguntar("Ano de publicação: ", String(atualizarLivro.ano_publicacao ?? ""))
-        const quantidade_total = await perguntar("Quantidade de exemplares: ", String(atualizarLivro.quantidade_total))
+        const ano_publicacao = await perguntar(
+            "Ano de publicação: ",
+            String(atualizarLivro.ano_publicacao ?? ""),
+        )
+        const quantidade_total = await perguntar(
+            "Quantidade de exemplares: ",
+            String(atualizarLivro.quantidade_total),
+        )
         const autor_id = await perguntar("ID do autor: ", String(atualizarLivro.autor_id))
 
-        await this.livroController.atualizar(id, { titulo, genero, isbn, ano_publicacao, quantidade_total, autor_id })
+        await this.livroController.atualizar(id, {
+            titulo,
+            genero,
+            isbn,
+            ano_publicacao,
+            quantidade_total,
+            autor_id,
+        })
         console.log("\nLivro atualizado com sucesso")
     }
     private async remover(): Promise<void> {
@@ -115,8 +133,8 @@ export class LivroMenu {
                 Gênero: livro.genero,
                 ISBN: livro.isbn,
                 Ano: livro.ano_publicacao,
-                Disponíveis: `${livro.quantidade_disponivel}/${livro.quantidade_total}`
-            }))
+                Disponíveis: `${livro.quantidade_disponivel}/${livro.quantidade_total}`,
+            })),
         )
     }
 }

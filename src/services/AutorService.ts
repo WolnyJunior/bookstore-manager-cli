@@ -32,7 +32,7 @@ export class AutorService {
             const removido = await this.repository.deletarAutor(id)
             if (!removido) throw new AppError("Autor não encontrado.")
         } catch (erro) {
-            if (codigoErroBanco(erro)===ERRO_CHAVE_ESTRANGEIRA) {
+            if (codigoErroBanco(erro) === ERRO_CHAVE_ESTRANGEIRA) {
                 throw new AppError("Não é possível remover: o autor possui livros cadastrados")
             }
             throw erro

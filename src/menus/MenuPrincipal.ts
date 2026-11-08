@@ -1,12 +1,12 @@
-import { perguntar } from "../utils/prompt";
-import { AutorMenu } from "./AutorMenu";
-import { LivroMenu } from "./LivroMenu";
+import { perguntar } from "../utils/prompt"
+import { AutorMenu } from "./AutorMenu"
+import { LivroMenu } from "./LivroMenu"
 
 export class MenuPrincipal {
     constructor(
         private readonly autorMenu: AutorMenu,
-        private readonly livroMenu: LivroMenu
-    ) { }
+        private readonly livroMenu: LivroMenu,
+    ) {}
 
     async exibir(): Promise<void> {
         while (true) {
@@ -23,12 +23,9 @@ export class MenuPrincipal {
                     return
                 }
             }
-            if (opcao === "1")
-                await this.autorMenu.exibirMenuAutor()
-            else if (opcao === "2")
-                await this.livroMenu.exibirMenuLivro()
-            else
-                console.log(("\nopção inválida."))
+            if (opcao === "1") await this.autorMenu.exibirMenuAutor()
+            else if (opcao === "2") await this.livroMenu.exibirMenuLivro()
+            else console.log("\nopção inválida.")
         }
     }
 }

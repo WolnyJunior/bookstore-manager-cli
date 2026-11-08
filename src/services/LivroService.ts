@@ -1,10 +1,15 @@
-import { Livro, LivroDetalhado, NovoLivro } from "../models/Livro";
-import { LivroRepository } from "../repositories/LivroRepository";
-import { AppError } from "../utils/AppError";
-import { codigoErroBanco, ERRO_CHAVE_ESTRANGEIRA, ERRO_CHECK, ERRO_UNIQUE } from "../utils/erroBanco";
+import { Livro, LivroDetalhado, NovoLivro } from "../models/Livro"
+import { LivroRepository } from "../repositories/LivroRepository"
+import { AppError } from "../utils/AppError"
+import {
+    codigoErroBanco,
+    ERRO_CHAVE_ESTRANGEIRA,
+    ERRO_CHECK,
+    ERRO_UNIQUE,
+} from "../utils/erroBanco"
 
 export class LivroService {
-    constructor(private readonly livroRepository: LivroRepository) { }
+    constructor(private readonly livroRepository: LivroRepository) {}
 
     async cadastrarLivro(dados: NovoLivro): Promise<Livro> {
         const cadastrarLivro = this.validar(dados)
@@ -22,8 +27,7 @@ export class LivroService {
     async buscarPorId(id: number): Promise<LivroDetalhado> {
         this.validarId(id)
         const livro = await this.livroRepository.buscarLivroPorId(id)
-        if (!livro)
-            throw new AppError("ID do livro não encontrado para busca.")
+        if (!livro) throw new AppError("ID do livro não encontrado para busca.")
         return livro
     }
 
@@ -32,8 +36,7 @@ export class LivroService {
         const livroAtualizado = this.validar(dados)
         try {
             const novoLivro = await this.livroRepository.atualizarLivro(id, livroAtualizado)
-            if (!novoLivro)
-                throw new AppError("ID do livro não encontrado para atualização.")
+            if (!novoLivro) throw new AppError("ID do livro não encontrado para atualização.")
             return novoLivro
         } catch (erro) {
             throw this.traduziErro(erro)
@@ -44,8 +47,7 @@ export class LivroService {
         this.validarId(id)
         try {
             const removido = await this.livroRepository.removerLivro(id)
-            if (!removido)
-                throw new AppError("ID do livro não encontrado para remoção.")
+            if (!removido) throw new AppError("ID do livro não encontrado para remoção.")
         } catch (erro) {
             if (codigoErroBanco(erro) === ERRO_CHAVE_ESTRANGEIRA) {
                 throw new AppError("Não é possível remover: livro possui empréstimo regsitrado.")
@@ -55,20 +57,16 @@ export class LivroService {
     }
     private validar(dados: NovoLivro): NovoLivro {
         const titulo = dados.titulo.trim()
-        if (!titulo)
-            throw new AppError("O título é obrigatório.")
+        if (!titulo) throw new AppError("O título é obrigatório.")
         if (titulo.length > 150)
             throw new AppError("O título deve conter no máximo 150 caracteres.")
 
         const genero = dados.genero.trim()
-        if (!genero)
-            throw new AppError("O gênero é obrigatório.")
+        if (!genero) throw new AppError("O gênero é obrigatório.")
 
         const isbn = dados.isbn.trim()
-        if (!isbn)
-            throw new AppError("O ISBN é obrigatório.")
-        if (isbn.length > 20)
-            throw new AppError("O ISBN deve conter no máximo 20 caracteres")
+        if (!isbn) throw new AppError("O ISBN é obrigatório.")
+        if (isbn.length > 20) throw new AppError("O ISBN deve conter no máximo 20 caracteres")
 
         const ano = dados.ano_publicacao
         const anoAtual = new Date().getFullYear()
@@ -87,7 +85,7 @@ export class LivroService {
             isbn,
             ano_publicacao: ano,
             quantidade_total: dados.quantidade_total,
-            autor_id: dados.autor_id
+            autor_id: dados.autor_id,
         }
     }
 
@@ -98,14 +96,15 @@ export class LivroService {
             case ERRO_CHAVE_ESTRANGEIRA:
                 return new AppError("Autor não encontrado")
             case ERRO_CHECK:
-                return new AppError("A quantidade total não pode ser menor que o número de exemplares emprestado.")
+                return new AppError(
+                    "A quantidade total não pode ser menor que o número de exemplares emprestado.",
+                )
             default:
                 return erro
         }
     }
 
     private validarId(id: number, rotulo = "ID"): void {
-        if (!Number.isInteger(id) || id <= 0)
-            throw new AppError(`${rotulo} inválido`)
+        if (!Number.isInteger(id) || id <= 0) throw new AppError(`${rotulo} inválido`)
     }
 }

@@ -12,16 +12,17 @@ async function start(): Promise<void> {
         console.log("Banco de dados conectado.")
         // Próximas sprints: abrir menu principal
 
-        const autorMenu = new AutorMenu(new AutorController(new AutorService(new AutorRepository())))
-        const livroMenu = new LivroMenu(new LivroController(new LivroService(new LivroRepository)))
+        const autorMenu = new AutorMenu(
+            new AutorController(new AutorService(new AutorRepository())),
+        )
+        const livroMenu = new LivroMenu(
+            new LivroController(new LivroService(new LivroRepository())),
+        )
 
         await new MenuPrincipal(autorMenu, livroMenu).exibir()
-
     } catch (error) {
-
         console.error("Falha ao iniciar a aplicação:", error)
         process.exitCode = 1 // encerra o processo sinalizando erro (código 1)
-
     } finally {
         fecharPrompt()
         // Por enquanto serve para encerrar o pool.
