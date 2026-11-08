@@ -25,7 +25,7 @@ export class AutorRepository {
         return resultadoListarAutores.rows
     }
 
-    async buscarAutorPorId(id: number, dados: NovoAutor): Promise<Autor | null> {
+    async buscarAutorPorId(id: number): Promise<Autor | null> {
         const resultadoBuscaAutorPorId = await pool.query<Autor>(
             `SELECT ${COLUNAS} FROM autores WHERE id=$1`, [id]
         )
