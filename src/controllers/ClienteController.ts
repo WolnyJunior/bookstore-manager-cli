@@ -1,5 +1,5 @@
-import { Cliente } from "../models/Cliente";
-import { ClienteService } from "../services";
+import { Cliente } from "../models/Cliente"
+import { ClienteService } from "../services"
 
 export interface EntradaCliente {
     nome: string
@@ -8,7 +8,7 @@ export interface EntradaCliente {
 }
 
 export class ClienteController {
-    constructor(private readonly clienteService: ClienteService) { }
+    constructor(private readonly clienteService: ClienteService) {}
 
     cadastrar(entrada: EntradaCliente): Promise<Cliente> {
         return this.clienteService.cadastrar(entrada)

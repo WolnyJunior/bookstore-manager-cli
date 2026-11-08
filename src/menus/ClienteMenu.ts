@@ -1,10 +1,10 @@
-import { ClienteController } from "../controllers";
-import { Cliente } from "../models/Cliente";
-import { AppError } from "../utils/AppError";
-import { perguntar } from "../utils/prompt";
+import { ClienteController } from "../controllers"
+import { Cliente } from "../models/Cliente"
+import { AppError } from "../utils/AppError"
+import { perguntar } from "../utils/prompt"
 
 export class ClienteMenu {
-    constructor(private readonly clienteController: ClienteController) { }
+    constructor(private readonly clienteController: ClienteController) {}
 
     async exibirMenuCliente(): Promise<void> {
         while (true) {
@@ -110,8 +110,8 @@ export class ClienteMenu {
                 Nome: cliente.nome,
                 "E-mail": cliente.email,
                 Telefone: cliente.telefone,
-                Cadastro: cliente.data_cadastro
-            }))
+                Cadastro: cliente.data_cadastro,
+            })),
         )
     }
 }

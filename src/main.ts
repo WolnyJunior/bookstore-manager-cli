@@ -19,7 +19,7 @@ async function start(): Promise<void> {
             new LivroController(new LivroService(new LivroRepository())),
         )
         const clienteMenu = new ClienteMenu(
-            new ClienteController(new ClienteService(new ClienteRepository()))
+            new ClienteController(new ClienteService(new ClienteRepository())),
         )
 
         await new MenuPrincipal(autorMenu, livroMenu, clienteMenu).exibir()

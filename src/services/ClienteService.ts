@@ -1,12 +1,17 @@
-import { Cliente, NovoCliente } from "../models/Cliente";
-import { ClienteRepository } from "../repositories";
-import { AppError } from "../utils/AppError";
-import { codigoErroBanco, ERRO_CHAVE_ESTRANGEIRA, ERRO_CHECK, ERRO_UNIQUE } from "../utils/erroBanco";
+import { Cliente, NovoCliente } from "../models/Cliente"
+import { ClienteRepository } from "../repositories"
+import { AppError } from "../utils/AppError"
+import {
+    codigoErroBanco,
+    ERRO_CHAVE_ESTRANGEIRA,
+    ERRO_CHECK,
+    ERRO_UNIQUE,
+} from "../utils/erroBanco"
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export class ClienteService {
-    constructor(private readonly clienteRepository: ClienteRepository) { }
+    constructor(private readonly clienteRepository: ClienteRepository) {}
 
     async cadastrar(dados: NovoCliente): Promise<Cliente> {
         const cliente = this.validar(dados)
@@ -24,8 +29,7 @@ export class ClienteService {
     async buscarPorId(id: number): Promise<Cliente> {
         this.validarId(id)
         const cliente = await this.clienteRepository.buscarClientePorId(id)
-        if (!cliente)
-            throw new AppError("ID do cliente não encontrado.")
+        if (!cliente) throw new AppError("ID do cliente não encontrado.")
         return cliente
     }
     async atualizar(id: number, dados: NovoCliente): Promise<Cliente> {
@@ -33,10 +37,8 @@ export class ClienteService {
         const novosDados = this.validar(dados)
         try {
             const cliente = await this.clienteRepository.atualizarCliente(id, novosDados)
-            if (!cliente)
-                throw new AppError("ID de cliente não encontrado.")
+            if (!cliente) throw new AppError("ID de cliente não encontrado.")
             return cliente
-
         } catch (erro) {
             throw this.traduzirErro(erro)
         }
@@ -56,18 +58,13 @@ export class ClienteService {
 
     private validar(dados: NovoCliente): NovoCliente {
         const nome = dados.nome.trim()
-        if (!nome)
-            throw new AppError("O nome do cliente é obrigatório.")
-        if (nome.length > 100)
-            throw new AppError("O nome deve ter no máximo 100 caracteres.")
+        if (!nome) throw new AppError("O nome do cliente é obrigatório.")
+        if (nome.length > 100) throw new AppError("O nome deve ter no máximo 100 caracteres.")
 
         const email = dados.email.trim().toLowerCase()
-        if (!email)
-            throw new AppError("O e-mail é obrigatório.")
-        if (email.length > 100)
-            throw new AppError("O e-mail deve ter no máximo 100 caracteres.")
-        if (!REGEX_EMAIL.test(email))
-            throw new AppError("E-mail inválido.")
+        if (!email) throw new AppError("O e-mail é obrigatório.")
+        if (email.length > 100) throw new AppError("O e-mail deve ter no máximo 100 caracteres.")
+        if (!REGEX_EMAIL.test(email)) throw new AppError("E-mail inválido.")
 
         const telefone = dados.telefone?.trim()
         if (telefone && telefone.length > 20) {

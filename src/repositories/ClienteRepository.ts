@@ -1,5 +1,5 @@
-import { pool } from "../config/database";
-import { Cliente, NovoCliente } from "../models/Cliente";
+import { pool } from "../config/database"
+import { Cliente, NovoCliente } from "../models/Cliente"
 
 const COLUNAS = `id, nome, email, telefone, data_cadastro`
 
@@ -9,11 +9,7 @@ export class ClienteRepository {
             `INSERT INTO clientes(nome, email, telefone)
             VALUES($1, $2, $3)
             RETURNING ${COLUNAS}`,
-            [
-                dados.nome, 
-                dados.email, 
-                dados.telefone
-            ]
+            [dados.nome, dados.email, dados.telefone],
         )
         const cliente = resultado.rows[0]
         if (!cliente) {
@@ -27,7 +23,10 @@ export class ClienteRepository {
     }
 
     async buscarClientePorId(id: number): Promise<Cliente | null> {
-        const resultado = await pool.query<Cliente>(`SELECT ${COLUNAS} FROM clientes WHERE id = $1`, [id])
+        const resultado = await pool.query<Cliente>(
+            `SELECT ${COLUNAS} FROM clientes WHERE id = $1`,
+            [id],
+        )
         return resultado.rows[0] ?? null
     }
 
@@ -37,12 +36,7 @@ export class ClienteRepository {
             SET nome = $1, email = $2, telefone = $3
             WHERE id = $4
             RETURNING ${COLUNAS}`,
-            [
-                dados.nome, 
-                dados.email, 
-                dados.telefone,
-                id
-            ]
+            [dados.nome, dados.email, dados.telefone, id],
         )
         return resultado.rows[0] ?? null
     }

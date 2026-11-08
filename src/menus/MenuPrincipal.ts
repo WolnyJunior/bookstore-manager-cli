@@ -8,7 +8,7 @@ export class MenuPrincipal {
         private readonly autorMenu: AutorMenu,
         private readonly livroMenu: LivroMenu,
         private readonly clienteMenu: ClienteMenu,
-    ) { }
+    ) {}
 
     async exibir(): Promise<void> {
         while (true) {
