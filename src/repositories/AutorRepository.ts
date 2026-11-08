@@ -33,11 +33,11 @@ export class AutorRepository {
     }
     async atualizarAutores(id: number, dados: NovoAutor): Promise<Autor | null> {
         const resultadoAtualizarAutor = await pool.query<Autor>(
-            `UPDADE autores
+            `UPDATE autores
             SET nome = $1, nacionalidade = $2, data_nascimento = $3
             WHERE id = $4
             RETURNING ${COLUNAS}`,
-            [dados.nome, dados.nacionalidade, dados.data_nascimento]
+            [dados.nome, dados.nacionalidade, dados.data_nascimento, id]
         )
         return resultadoAtualizarAutor.rows[0] ?? null
     }
