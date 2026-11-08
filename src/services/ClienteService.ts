@@ -4,7 +4,6 @@ import { AppError } from "../utils/AppError"
 import {
     codigoErroBanco,
     ERRO_CHAVE_ESTRANGEIRA,
-    ERRO_CHECK,
     ERRO_UNIQUE,
 } from "../utils/erroBanco"
 
