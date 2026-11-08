@@ -1,17 +1,7 @@
 import { Autor, NovoAutor } from "../models/Autor"
 import { AutorRepository } from "../repositories/AutorRepository"
 import { AppError } from "../utils/AppError"
-
-const ERRO_CHAVE_ESTRANGEIRA = "23503"
-
-function violouChaveEstrangeira(erro: unknown): boolean {
-    return (
-        typeof erro === "object" &&
-        erro !== null &&
-        "code" in erro &&
-        erro.code === ERRO_CHAVE_ESTRANGEIRA
-    )
-}
+import { codigoErroBanco, ERRO_CHAVE_ESTRANGEIRA } from "../utils/erroBanco"
 
 export class AutorService {
     constructor(private readonly repository: AutorRepository) {}
@@ -42,7 +32,7 @@ export class AutorService {
             const removido = await this.repository.deletarAutor(id)
             if (!removido) throw new AppError("Autor não encontrado.")
         } catch (erro) {
-            if (violouChaveEstrangeira(erro)) {
+            if (codigoErroBanco(erro)===ERRO_CHAVE_ESTRANGEIRA) {
                 throw new AppError("Não é possível remover: o autor possui livros cadastrados")
             }
             throw erro
