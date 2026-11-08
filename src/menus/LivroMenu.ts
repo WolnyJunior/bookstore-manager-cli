@@ -55,15 +55,15 @@ export class LivroMenu {
     }
 
     private async cadastrar(): Promise<void> {
-        const titulo = await perguntar("Título")
-        const genero = await perguntar("Gênero")
-        const isbn = await perguntar("ISBN")
+        const titulo = await perguntar("Título.")
+        const genero = await perguntar("Gênero.")
+        const isbn = await perguntar("ISBN.")
         const ano_publicacao = await perguntar("Ano de publicação(opcional).")
         const quantidade_total = await perguntar("Quantidade de exemplares.")
         const autor_id = await perguntar("ID do autor.")
 
         const livro = await this.livroController.cadastrar({ titulo, genero, isbn, ano_publicacao, quantidade_total, autor_id })
-        console.log(`\nLivro cadastrado com sucesso: ${livro}`)
+        console.log(`\nLivro ${livro.titulo} cadastrado com sucesso.`)
     }
     private async listar(): Promise<void> {
         const livros = await this.livroController.listar()
@@ -83,9 +83,9 @@ export class LivroMenu {
         const atualizarLivro = await this.livroController.buscarPorId(id)
 
         console.log("Pressione Enter para manter o valor atual.")
-        const titulo = await perguntar("Título", atualizarLivro.titulo)
-        const genero = await perguntar("Título", atualizarLivro.genero)
-        const isbn = await perguntar("Título", atualizarLivro.isbn)
+        const titulo = await perguntar("Título: ", atualizarLivro.titulo)
+        const genero = await perguntar("Gênero: ", atualizarLivro.genero)
+        const isbn = await perguntar("ISBN: ", atualizarLivro.isbn)
         const ano_publicacao = await perguntar("Ano de publicação: ", String(atualizarLivro.ano_publicacao ?? ""))
         const quantidade_total = await perguntar("Quantidade de exemplares: ", String(atualizarLivro.quantidade_total))
         const autor_id = await perguntar("ID do autor: ", String(atualizarLivro.autor_id))
@@ -115,7 +115,7 @@ export class LivroMenu {
                 Gênero: livro.genero,
                 ISBN: livro.isbn,
                 Ano: livro.ano_publicacao,
-                Disponíveis: `${livro.quandidade_disponivel}/${livro.quantidade_total}`
+                Disponíveis: `${livro.quantidade_disponivel}/${livro.quantidade_total}`
             }))
         )
     }
