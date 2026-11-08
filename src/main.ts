@@ -1,8 +1,8 @@
 import { pool, testConnection } from "./config/database"
-import { AutorController, LivroController } from "./controllers"
-import { AutorMenu, LivroMenu, MenuPrincipal } from "./menus"
-import { AutorRepository, LivroRepository } from "./repositories"
-import { AutorService, LivroService } from "./services"
+import { AutorController, ClienteController, LivroController } from "./controllers"
+import { AutorMenu, LivroMenu, MenuPrincipal, ClienteMenu } from "./menus"
+import { AutorRepository, ClienteRepository, LivroRepository } from "./repositories"
+import { AutorService, ClienteService, LivroService } from "./services"
 import { fecharPrompt } from "./utils/prompt"
 
 async function start(): Promise<void> {
@@ -18,8 +18,11 @@ async function start(): Promise<void> {
         const livroMenu = new LivroMenu(
             new LivroController(new LivroService(new LivroRepository())),
         )
+        const clienteMenu = new ClienteMenu(
+            new ClienteController(new ClienteService(new ClienteRepository())),
+        )
 
-        await new MenuPrincipal(autorMenu, livroMenu).exibir()
+        await new MenuPrincipal(autorMenu, livroMenu, clienteMenu).exibir()
     } catch (error) {
         console.error("Falha ao iniciar a aplicação:", error)
         process.exitCode = 1 // encerra o processo sinalizando erro (código 1)
