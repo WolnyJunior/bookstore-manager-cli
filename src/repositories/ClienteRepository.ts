@@ -9,7 +9,11 @@ export class ClienteRepository {
             `INSERT INTO clientes(nome, email, telefone)
             VALUES($1, $2, $3)
             RETURNING ${COLUNAS}`,
-            [dados.nome, dados.email, dados.telefone]
+            [
+                dados.nome, 
+                dados.email, 
+                dados.telefone
+            ]
         )
         const cliente = resultado.rows[0]
         if (!cliente) {
@@ -33,12 +37,17 @@ export class ClienteRepository {
             SET nome = $1, email = $2, telefone = $3
             WHERE id = $4
             RETURNING ${COLUNAS}`,
-            [dados.nome, dados.email, dados.telefone]
+            [
+                dados.nome, 
+                dados.email, 
+                dados.telefone,
+                id
+            ]
         )
         return resultado.rows[0] ?? null
     }
     async removerCliente(id: number): Promise<boolean> {
-        const resultado = await pool.query(`DELETE FROM clientes WHERE id = $1`, [1])
+        const resultado = await pool.query(`DELETE FROM clientes WHERE id = $1`, [id])
         return (resultado.rowCount ?? 0) > 0
     }
 }
