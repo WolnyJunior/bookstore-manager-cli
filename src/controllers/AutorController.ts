@@ -1,5 +1,5 @@
-import { Autor } from "../models/Autor";
-import { AutorService } from "../services/AutorService";
+import { Autor } from "../models/Autor"
+import { AutorService } from "../services/AutorService"
 
 export interface EntradaAutor {
     nome: string
@@ -8,7 +8,7 @@ export interface EntradaAutor {
 }
 
 export class AutorController {
-    constructor(private readonly service: AutorService) { }
+    constructor(private readonly service: AutorService) {}
 
     cadastrar(entrada: EntradaAutor): Promise<Autor> {
         return this.service.cadastrar(entrada)

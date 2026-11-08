@@ -1,9 +1,9 @@
-import { AutorController } from "../controllers/AutorController";
-import { AppError } from "../utils/AppError";
-import { perguntar } from "../utils/prompt";
+import { AutorController } from "../controllers/AutorController"
+import { AppError } from "../utils/AppError"
+import { perguntar } from "../utils/prompt"
 
 export class AutorMenu {
-    constructor(private readonly autorController: AutorController) { }
+    constructor(private readonly autorController: AutorController) {}
 
     async exibirMenuAutor(): Promise<void> {
         while (true) {
@@ -16,8 +16,7 @@ export class AutorMenu {
             console.log("0 - Voltar")
 
             const opcaoSelecionada = await perguntar("Escolha uma opção:")
-            if (opcaoSelecionada === "0")
-                return
+            if (opcaoSelecionada === "0") return
             await this.executarOpcaoComTratamentoDeErro(opcaoSelecionada)
         }
     }
@@ -55,14 +54,16 @@ export class AutorMenu {
     private async cadastrar(): Promise<void> {
         const confirmacao = await perguntar(`Deseja cadastrar novo autor? (s/n)`)
         if (confirmacao.toLowerCase() === "s") {
-
             const nome = await perguntar("Nome:")
             const nacionalidade = await perguntar("Nacionalidade:")
             const data_nascimento = await perguntar("Dataa de nascimento: AAAA-MM-DD")
-            const cadastrarNovoAutor = await this.autorController.cadastrar({ nome, nacionalidade, data_nascimento })
+            const cadastrarNovoAutor = await this.autorController.cadastrar({
+                nome,
+                nacionalidade,
+                data_nascimento,
+            })
 
             console.log(`\nAutor cadastrado com ID: ${cadastrarNovoAutor.id}`)
-
         } else {
             console.log("\nOperação cancelada.")
         }
@@ -90,7 +91,10 @@ export class AutorMenu {
         console.log("Pressione Enter para manter o valor atual.")
         const nome = await perguntar("Nome:", atualizar.nome)
         const nacionalidade = await perguntar("Nacionalidade:", atualizar.nacionalidade ?? "")
-        const data_nascimento = await perguntar("Dataa de nascimento: AAAA-MM-DD", atualizar.data_nascimento ?? "")
+        const data_nascimento = await perguntar(
+            "Dataa de nascimento: AAAA-MM-DD",
+            atualizar.data_nascimento ?? "",
+        )
 
         await this.autorController.atualizar(id, { nome, nacionalidade, data_nascimento })
         console.log("\nAutor atualizado com sucesso.")
@@ -109,4 +113,3 @@ export class AutorMenu {
         }
     }
 }
-

@@ -12,7 +12,9 @@ async function start(): Promise<void> {
         console.log("Banco de dados conectado.")
         // Próximas sprints: abrir menu principal
 
-        const autorMenu = new AutorMenu(new AutorController(new AutorService(new AutorRepository())))
+        const autorMenu = new AutorMenu(
+            new AutorController(new AutorService(new AutorRepository())),
+        )
         await autorMenu.exibirMenuAutor()
     } catch (error) {
         console.error("Falha ao iniciar a aplicação:", error)
