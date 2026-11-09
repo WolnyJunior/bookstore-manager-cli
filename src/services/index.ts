@@ -1,0 +1,5 @@
+export { AutorService } from "./AutorService"
+export { LivroService } from "./LivroService"
+export { ClienteService } from "./ClienteService"
+export { EmprestimoService } from "./EmprestimoService"
+export { RelatorioService } from "./RelatorioService"

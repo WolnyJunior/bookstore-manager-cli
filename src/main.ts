@@ -1,18 +1,82 @@
-import app from "./app"
-import { env } from "./config/env"
-import { sequelize } from "./config/database"
+import { pool, testConnection } from "./config/database"
+import {
+    AutorController,
+    ClienteController,
+    LivroController,
+    EmprestimoController,
+    RelatorioController,
+} from "./controllers"
+import {
+    AutorMenu,
+    LivroMenu,
+    MenuPrincipal,
+    ClienteMenu,
+    EmprestimoMenu,
+    RelatorioMenu,
+} from "./menus"
+import {
+    AutorRepository,
+    ClienteRepository,
+    LivroRepository,
+    EmprestimoRepository,
+} from "./repositories"
+import { RelatorioRepository } from "./repositories/RelatorioRepository"
+import {
+    AutorService,
+    ClienteService,
+    LivroService,
+    EmprestimoService,
+    RelatorioService,
+} from "./services"
+import { fecharPrompt } from "./utils/prompt"
 
 async function start(): Promise<void> {
     try {
-        await sequelize.authenticate() // testa a conexão com o banco de dados
-        console.log("Banco de dados conectado...")
+        console.log("BookStore Manager CLI")
+        await testConnection()
+        console.log("Banco de dados conectado.")
+        // Próximas sprints: abrir menu principal
 
-        app.listen(env.port, () => {
-            console.log(`Servidor rodando em http://localhost:${env.port}`)
-        })
+        const clienteRepository = new ClienteRepository()
+        const livroRepository = new LivroRepository()
+
+        const autorMenu = new AutorMenu(
+            new AutorController(new AutorService(new AutorRepository())),
+        )
+        const livroMenu = new LivroMenu(
+            new LivroController(new LivroService(new LivroRepository())),
+        )
+        const clienteMenu = new ClienteMenu(
+            new ClienteController(new ClienteService(new ClienteRepository())),
+        )
+        const emprestimoMenu = new EmprestimoMenu(
+            new EmprestimoController(
+                new EmprestimoService(
+                    new EmprestimoRepository(),
+                    clienteRepository,
+                    livroRepository,
+                ),
+            ),
+        )
+        const relatorioMenu = new RelatorioMenu(
+            new RelatorioController(new RelatorioService(new RelatorioRepository())),
+        )
+
+        await new MenuPrincipal(
+            autorMenu,
+            livroMenu,
+            clienteMenu,
+            emprestimoMenu,
+            relatorioMenu,
+        ).exibir()
     } catch (error) {
         console.error("Falha ao iniciar a aplicação:", error)
-        process.exit(1) // encerra o processo sinalizando erro (código 1)
+        process.exitCode = 1 // encerra o processo sinalizando erro (código 1)
+    } finally {
+        fecharPrompt()
+        // Por enquanto serve para encerrar o pool.
+        // quando existir o menu, vai ser a opção de "encerrar a aplicação."
+        await pool.end()
     }
 }
 
