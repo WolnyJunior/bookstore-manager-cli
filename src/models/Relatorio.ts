@@ -9,7 +9,7 @@ export interface EmprestimoAtrasado {
     cliente: string
     livro: string
     data_prevista_devolucao: string
-    dias_atrazo: number
+    dias_atraso: number
 }
 
 export interface ClienteAtivo {
