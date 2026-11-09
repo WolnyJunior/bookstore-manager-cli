@@ -50,7 +50,6 @@ cp .env.example .env   # Para Linux/Mac:
 | `DB_PASSWORD`        | Senha do banco                      | obrigatória    |
 
 ### 4. Criar o banco de dados
-
 No pgAdmin ou no `psql`, execute:
 ```sql
 CREATE DATABASE bookstore;
@@ -74,57 +73,88 @@ npm run build
 npm start
 ```
 
-## Scripts
+## Banco de dados
+O banco é relacional e modelado com 4 tabelas.
+
+![DER do banco de dados](database/DER.png)
+
+| Relacionamento | Descrição |
+|---|---|
+| `autores` 1:N `livros` | Um autor escreve vários livros |
+| `clientes` 1:N `emprestimos` | Um cliente faz vários empréstimos |
+| `livros` 1:N `emprestimos` | Um livro aparece em vários empréstimos |
+
+O arquivo [`database/script.sql`](database/script.sql) reúne:
+- **DDL:** criação das tabelas, com chaves primárias e estrangeiras, `UNIQUE`, `CHECK` e `DEFAULT`
+- **DML:** dados de exemplo
+- **Consultas relacionais:** JOINs, agrupamentos e filtros
+- **Consultas dos relatórios gerenciais**
+
+Um empréstimo é considerado **ativo** quando `data_devolucao` é nula.
+
+## Arquitetura
+O código é organizado em camadas, cada uma com uma responsabilidade:
+
+```
+Usuário > Menu > Controller > Service > Repository > Banco de dados
+```
+
+| Camada | Responsabilidade |
+|---|---|
+| **Menu** | Interação com o usuário no terminal |
+| **Controller** | Converte o que foi digitado e chama o service |
+| **Service** | Validações e regras de negócio |
+| **Repository** | Acesso ao banco (SQL) |
+| **Model** | Define o formato dos dados |
+
+### Estrutura de pastas
+```
+bookstore-manager-cli
+├── database
+│   ├── DER.png
+│   └── script.sql
+├── src
+│   ├── config
+│   ├── controllers
+│   ├── menus
+│   ├── models
+│   ├── repositories
+│   ├── services
+│   ├── utils
+│   └── main.ts
+├── .env
+├── .env.example
+├── .gitignore
+├── .prettierignore
+├── .prettierrc.json
+├── eslint.config.mjs
+├── package-lock.json
+├── package.json
+├── README.md
+├── tsconfig.build.json
+├── tsconfig.json
+└── vitest.config.mts
+```
+
+### Scripts
 - `npm run dev` | Roda em desenvolvimento(reinicia ao salvar)
 - `npm run build` | Compila o TypeScript para `dist/`
 - `npm start` | Roda o código compilado
 - `npm run lint` | Verifica problemas no código (ESLint) |
-- `npm run lint:fix` | Corrige automaticamente o que for possível |
 - `npm run format` | Formata o código (Prettier) |
-- `npm run format:check` | Apenas verifica a formatação |
 - `npm run typecheck` | Verifica os tipos do TypeScript sem gerar arquivos |
-- `npm run db:seed` | Popula o banco (admin inicial e usuarios de exemplo)
-- `npm run db:seed:undo` | Remove do dados criados pelos seeders
-- `npm run db:seed:create -- nome` | Cria um novo seeder
 
+### Fluxo de trabalho (Git)
 
-## Tratamento de erros
-Erros esperados são lançados em `AppError(mensagem, statusCode)` e o middleware `errorHandler` responde sempre em JSON:
-
-
-## Padrão de código
-O estilo é definido pelo Prettier(`.prettierrc.json`) e as boas práticas pelo `ESLint`
-```bash
-npm run lint
-npm run format
-npm run typecheck
-```
-> O TypeScript está fixado na série 6.0 (`~6.0.0`) porque o `typescript-eslint` ainda não suporta a versão 7. Ao atualizar, confira antes a compatibilidade.
-
-
-## Estrutura de pastas
-
-src/
-├── main.ts - # inicia o servidor
-├── app.ts - # configura o Express (JSON, rotas, erros)
-├── config/ - # variáveis de ambiente e conexão com o banco
-├── controllers/ - # recebem a requisição e devolvem a resposta
-├── database/ - # configuração do sequelize-cli, migrations e seeders
-├── models/ - # modelos do banco (Sequelize)
-├── services/ - # regras de negócio
-├── types/ - # extensões de tipos (ex.: req.usuario)
-├── utils/ - # funções auxiliares (AppError, parseId)
-
-
-## Fluxo de trabalho (Git)
 - `main`: versões estáveis, marcadas com tags (`v1.0.0`).
 - `develop`: integração do trabalho em andamento.
-- `feature/*`: uma tarefa por branch, nasce da `develop` e volta por Pull Request.
-- `release/*`: preparação de uma versão, termina na `main` e volta para a `develop`.
+- `feat/*`: uma tarefa por branch, nasce da `develop` e volta por Pull Request. Funcionalidades(banco de dados, autores, livros, clientes, empréstimos, relatórios e documentação)
 - Commits no padrão Conventional Commits: `feat`, `fix`, `docs`, `style`, `test`, `chore`.
 
+A organização das tarefas foi feita em um quadro Kanban: [Quadro no Trello](https://trello.com/invite/b/6aea9e68f7d33634282be284/ATTI841eb2373934943c5b0ce3b5ed200037522DD483/bookstore-manager-cli)
 
-## Como usar
+
+### Como usar
 
 Ao iniciar, a aplicação conecta ao banco e abre o menu principal. Digite o número da opção e pressione **Enter**.
 
@@ -152,7 +182,7 @@ Ao iniciar, a aplicação conecta ao banco e abre o menu principal. Digite o nú
 - Datas são digitadas no formato `AAAA-MM-DD` (exemplo: `1985-03-21`).
 - Erros de validação aparecem como mensagens com o símbolo ⚠, e o menu continua funcionando.
 
-## Regras de negócio
+### Regras de negócio
 
 **Autores**
 - O nome é obrigatório (até 100 caracteres).
@@ -180,3 +210,7 @@ Ao iniciar, a aplicação conecta ao banco e abre o menu principal. Digite o nú
 - O prazo de devolução é de 14 dias.
 - Cada empréstimo só pode ser devolvido uma vez. Na devolução, o exemplar volta ao estoque e, se houve atraso, os dias são informados.
 - Empréstimo e devolução usam **transação**: o registro e o ajuste do estoque acontecem juntos ou não acontecem.
+
+## Autor
+
+Desenvolvido por Wolny Junior, como projeto avaliativo do curso Desenvolvedor Back-end Node.JS
