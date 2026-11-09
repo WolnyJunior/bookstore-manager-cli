@@ -122,3 +122,61 @@ src/
 - `feature/*`: uma tarefa por branch, nasce da `develop` e volta por Pull Request.
 - `release/*`: preparação de uma versão, termina na `main` e volta para a `develop`.
 - Commits no padrão Conventional Commits: `feat`, `fix`, `docs`, `style`, `test`, `chore`.
+
+
+## Como usar
+
+Ao iniciar, a aplicação conecta ao banco e abre o menu principal. Digite o número da opção e pressione **Enter**.
+
+```
+=== BOOKSTORE MANAGER ===
+1 - Autores
+2 - Livros
+3 - Clientes
+4 - Empréstimos
+5 - Relatórios
+0 - Encerrar aplicação
+```
+
+| Menu | Opções |
+|---|---|
+| **Autores** | Cadastrar, listar, buscar por ID, atualizar e remover |
+| **Livros** | Cadastrar, listar (com o nome do autor), buscar por ID, atualizar e remover |
+| **Clientes** | Cadastrar, listar, buscar por ID, atualizar e remover |
+| **Empréstimos** | Registrar empréstimo, registrar devolução, listar todos e listar ativos |
+| **Relatórios** | Resumo do acervo, livros mais emprestados, empréstimos atrasados, clientes mais ativos e livros por autor |
+
+**Dicas:**
+- Ao **atualizar** um registro, pressione Enter em um campo para manter o valor atual.
+- Para cadastrar um livro ou registrar um empréstimo, você precisa dos IDs de autores, clientes e livros: veja-os na opção **Listar** de cada menu.
+- Datas são digitadas no formato `AAAA-MM-DD` (exemplo: `1985-03-21`).
+- Erros de validação aparecem como mensagens com o símbolo ⚠, e o menu continua funcionando.
+
+## Regras de negócio
+
+**Autores**
+- O nome é obrigatório (até 100 caracteres).
+- A data de nascimento, se informada, deve ser uma data real e não pode estar no futuro.
+- Um autor que possui livros não pode ser removido.
+
+**Livros**
+- Título e ISBN são obrigatórios, e o ISBN deve ser único.
+- O ano de publicação, se informado, deve estar entre 1 e o ano atual.
+- A quantidade de exemplares deve ser um inteiro maior que zero.
+- O autor informado deve existir.
+- Ao cadastrar, os exemplares disponíveis começam iguais ao total. Ao alterar o total, o disponível é recalculado descontando os exemplares emprestados.
+- Um livro que possui empréstimos registrados não pode ser removido.
+
+**Clientes**
+- Nome e e-mail são obrigatórios. O e-mail precisa ter formato válido, é salvo em minúsculas e deve ser único.
+- A data de cadastro é preenchida automaticamente.
+- Um cliente que possui empréstimos registrados não pode ser removido.
+
+**Empréstimos**
+- O cliente e o livro precisam existir.
+- O livro precisa ter pelo menos um exemplar disponível.
+- Cliente com empréstimo em atraso não pode pegar novos livros.
+- Cada cliente pode ter no máximo 3 empréstimos ativos ao mesmo tempo.
+- O prazo de devolução é de 14 dias.
+- Cada empréstimo só pode ser devolvido uma vez. Na devolução, o exemplar volta ao estoque e, se houve atraso, os dias são informados.
+- Empréstimo e devolução usam **transação**: o registro e o ajuste do estoque acontecem juntos ou não acontecem.
