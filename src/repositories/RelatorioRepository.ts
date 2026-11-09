@@ -1,10 +1,14 @@
-import { pool } from "../config/database";
-import { ClienteAtivo, EmprestimoAtrasado, LivroMaisEmprestado, LivrosPorAutor, ResumoAcervo } from "../models/Relatorio";
+import { pool } from "../config/database"
+import {
+    ClienteAtivo,
+    EmprestimoAtrasado,
+    LivroMaisEmprestado,
+    LivrosPorAutor,
+    ResumoAcervo,
+} from "../models/Relatorio"
 
 export class RelatorioRepository {
-
     async livrosMaisEmprestados(): Promise<LivroMaisEmprestado[]> {
-
         const resultado = await pool.query<LivroMaisEmprestado>(
             `SELECT l.titulo, a.nome AS autor, COUNT(e.id)::integer AS total_emprestimos
              FROM livros l
@@ -20,7 +24,6 @@ export class RelatorioRepository {
     }
 
     async emprestimosAtrasados(): Promise<EmprestimoAtrasado[]> {
-
         const resultado = await pool.query<EmprestimoAtrasado>(
             `SELECT e.id, c.nome AS cliente, c.telefone, l.titulo AS livro,
                     e.data_prevista_devolucao,

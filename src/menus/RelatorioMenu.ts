@@ -1,9 +1,9 @@
-import { RelatorioController } from "../controllers";
-import { AppError } from "../utils/AppError";
-import { perguntar } from "../utils/prompt";
+import { RelatorioController } from "../controllers"
+import { AppError } from "../utils/AppError"
+import { perguntar } from "../utils/prompt"
 
 export class RelatorioMenu {
-    constructor(private readonly relatorioController: RelatorioController) { }
+    constructor(private readonly relatorioController: RelatorioController) {}
 
     async exibir(): Promise<void> {
         while (true) {

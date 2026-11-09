@@ -1,8 +1,14 @@
-import { ClienteAtivo, EmprestimoAtrasado, LivroMaisEmprestado, LivrosPorAutor, ResumoAcervo } from "../models/Relatorio";
-import { RelatorioService } from "../services";
+import {
+    ClienteAtivo,
+    EmprestimoAtrasado,
+    LivroMaisEmprestado,
+    LivrosPorAutor,
+    ResumoAcervo,
+} from "../models/Relatorio"
+import { RelatorioService } from "../services"
 
 export class RelatorioController {
-    constructor(private readonly relatorioService: RelatorioService) { }
+    constructor(private readonly relatorioService: RelatorioService) {}
 
     resumoAcervo(): Promise<ResumoAcervo> {
         return this.relatorioService.resumoAcervo()

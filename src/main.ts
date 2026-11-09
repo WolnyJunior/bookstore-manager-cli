@@ -6,7 +6,14 @@ import {
     EmprestimoController,
     RelatorioController,
 } from "./controllers"
-import { AutorMenu, LivroMenu, MenuPrincipal, ClienteMenu, EmprestimoMenu, RelatorioMenu } from "./menus"
+import {
+    AutorMenu,
+    LivroMenu,
+    MenuPrincipal,
+    ClienteMenu,
+    EmprestimoMenu,
+    RelatorioMenu,
+} from "./menus"
 import {
     AutorRepository,
     ClienteRepository,
@@ -14,7 +21,13 @@ import {
     EmprestimoRepository,
 } from "./repositories"
 import { RelatorioRepository } from "./repositories/RelatorioRepository"
-import { AutorService, ClienteService, LivroService, EmprestimoService, RelatorioService } from "./services"
+import {
+    AutorService,
+    ClienteService,
+    LivroService,
+    EmprestimoService,
+    RelatorioService,
+} from "./services"
 import { fecharPrompt } from "./utils/prompt"
 
 async function start(): Promise<void> {
@@ -45,9 +58,17 @@ async function start(): Promise<void> {
                 ),
             ),
         )
-        const relatorioMenu = new RelatorioMenu(new RelatorioController(new RelatorioService(new RelatorioRepository)))
+        const relatorioMenu = new RelatorioMenu(
+            new RelatorioController(new RelatorioService(new RelatorioRepository())),
+        )
 
-        await new MenuPrincipal(autorMenu, livroMenu, clienteMenu, emprestimoMenu, relatorioMenu).exibir()
+        await new MenuPrincipal(
+            autorMenu,
+            livroMenu,
+            clienteMenu,
+            emprestimoMenu,
+            relatorioMenu,
+        ).exibir()
     } catch (error) {
         console.error("Falha ao iniciar a aplicação:", error)
         process.exitCode = 1 // encerra o processo sinalizando erro (código 1)
