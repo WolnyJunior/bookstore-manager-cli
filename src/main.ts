@@ -1,8 +1,18 @@
 import { pool, testConnection } from "./config/database"
-import { AutorController, ClienteController, LivroController } from "./controllers"
-import { AutorMenu, LivroMenu, MenuPrincipal, ClienteMenu } from "./menus"
-import { AutorRepository, ClienteRepository, LivroRepository } from "./repositories"
-import { AutorService, ClienteService, LivroService } from "./services"
+import {
+    AutorController,
+    ClienteController,
+    LivroController,
+    EmprestimoController,
+} from "./controllers"
+import { AutorMenu, LivroMenu, MenuPrincipal, ClienteMenu, EmprestimoMenu } from "./menus"
+import {
+    AutorRepository,
+    ClienteRepository,
+    LivroRepository,
+    EmprestimoRepository,
+} from "./repositories"
+import { AutorService, ClienteService, LivroService, EmprestimoService } from "./services"
 import { fecharPrompt } from "./utils/prompt"
 
 async function start(): Promise<void> {
@@ -11,6 +21,9 @@ async function start(): Promise<void> {
         await testConnection()
         console.log("Banco de dados conectado.")
         // Próximas sprints: abrir menu principal
+
+        const clienteRepository = new ClienteRepository()
+        const livroRepository = new LivroRepository()
 
         const autorMenu = new AutorMenu(
             new AutorController(new AutorService(new AutorRepository())),
@@ -21,8 +34,17 @@ async function start(): Promise<void> {
         const clienteMenu = new ClienteMenu(
             new ClienteController(new ClienteService(new ClienteRepository())),
         )
+        const emprestimoMenu = new EmprestimoMenu(
+            new EmprestimoController(
+                new EmprestimoService(
+                    new EmprestimoRepository(),
+                    clienteRepository,
+                    livroRepository,
+                ),
+            ),
+        )
 
-        await new MenuPrincipal(autorMenu, livroMenu, clienteMenu).exibir()
+        await new MenuPrincipal(autorMenu, livroMenu, clienteMenu, emprestimoMenu).exibir()
     } catch (error) {
         console.error("Falha ao iniciar a aplicação:", error)
         process.exitCode = 1 // encerra o processo sinalizando erro (código 1)

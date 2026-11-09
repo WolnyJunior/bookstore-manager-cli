@@ -68,6 +68,6 @@ export class AutorService {
     }
 
     private validarId(id: number): void {
-        if (!Number.isInteger(id) || id <= 0) throw new AppError("ID inválido.")
+        if (!Number.isInteger(id) || id <= 0) throw new AppError(`ID inválido`)
     }
 }

@@ -77,7 +77,7 @@ export class LivroService {
             throw new AppError("A quantidade deve ser um número inteiro maior que zero.")
         }
 
-        this.validarId(dados.autor_id, "ID do autor")
+        this.validarId(dados.autor_id)
 
         return {
             titulo,
@@ -104,7 +104,7 @@ export class LivroService {
         }
     }
 
-    private validarId(id: number, rotulo = "ID"): void {
-        if (!Number.isInteger(id) || id <= 0) throw new AppError(`${rotulo} inválido`)
+    private validarId(id: number): void {
+        if (!Number.isInteger(id) || id <= 0) throw new AppError(`ID inválido`)
     }
 }
