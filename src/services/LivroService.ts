@@ -9,7 +9,7 @@ import {
 } from "../utils/erroBanco"
 
 export class LivroService {
-    constructor(private readonly livroRepository: LivroRepository) { }
+    constructor(private readonly livroRepository: LivroRepository) {}
 
     async cadastrarLivro(dados: NovoLivro): Promise<Livro> {
         const cadastrarLivro = this.validar(dados)
@@ -105,7 +105,6 @@ export class LivroService {
     }
 
     private validarId(id: number): void {
-        if (!Number.isInteger(id) || id <= 0)
-            throw new AppError(`ID inválido`)
+        if (!Number.isInteger(id) || id <= 0) throw new AppError(`ID inválido`)
     }
 }

@@ -1,10 +1,10 @@
-import { EmprestimoController } from "../controllers";
-import { EmprestimoDetalhado } from "../models/Emprestimo";
-import { AppError } from "../utils/AppError";
-import { perguntar } from "../utils/prompt";
+import { EmprestimoController } from "../controllers"
+import { EmprestimoDetalhado } from "../models/Emprestimo"
+import { AppError } from "../utils/AppError"
+import { perguntar } from "../utils/prompt"
 
 export class EmprestimoMenu {
-    constructor(private readonly emprestimoController: EmprestimoController) { }
+    constructor(private readonly emprestimoController: EmprestimoController) {}
 
     async exibirMenuEmprestimo(): Promise<void> {
         while (true) {
@@ -93,8 +93,8 @@ export class EmprestimoMenu {
                 Empréstimo: emprestimo.data_emprestimo,
                 Previsão_Entrega: emprestimo.data_prevista_devolucao,
                 Devolução: emprestimo.data_devolucao,
-                Situação: emprestimo.situacao
-            }))
+                Situação: emprestimo.situacao,
+            })),
         )
     }
 }

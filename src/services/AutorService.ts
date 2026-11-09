@@ -4,7 +4,7 @@ import { AppError } from "../utils/AppError"
 import { codigoErroBanco, ERRO_CHAVE_ESTRANGEIRA } from "../utils/erroBanco"
 
 export class AutorService {
-    constructor(private readonly repository: AutorRepository) { }
+    constructor(private readonly repository: AutorRepository) {}
 
     async cadastrar(dados: NovoAutor): Promise<Autor> {
         return this.repository.criarAutor(this.validar(dados))
@@ -68,7 +68,6 @@ export class AutorService {
     }
 
     private validarId(id: number): void {
-        if (!Number.isInteger(id) || id <= 0)
-            throw new AppError(`ID inválido`)
+        if (!Number.isInteger(id) || id <= 0) throw new AppError(`ID inválido`)
     }
 }

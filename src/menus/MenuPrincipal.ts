@@ -9,7 +9,7 @@ export class MenuPrincipal {
         private readonly autorMenu: AutorMenu,
         private readonly livroMenu: LivroMenu,
         private readonly clienteMenu: ClienteMenu,
-        private readonly emprestimoMenu: EmprestimoMenu
+        private readonly emprestimoMenu: EmprestimoMenu,
     ) {}
 
     async exibir(): Promise<void> {

@@ -10,7 +10,7 @@ export interface Emprestimo {
 export interface EmprestimoDetalhado extends Emprestimo {
     cliente_nome: string
     livro_titulo: string
-    situacao: string    //  "Ativo", "Atrasado", "Devolvido"
+    situacao: string //  "Ativo", "Atrasado", "Devolvido"
 }
 
 export interface Devolucao extends Emprestimo {

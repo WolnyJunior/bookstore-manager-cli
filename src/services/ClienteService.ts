@@ -1,16 +1,12 @@
 import { Cliente, NovoCliente } from "../models/Cliente"
 import { ClienteRepository } from "../repositories"
 import { AppError } from "../utils/AppError"
-import {
-    codigoErroBanco,
-    ERRO_CHAVE_ESTRANGEIRA,
-    ERRO_UNIQUE,
-} from "../utils/erroBanco"
+import { codigoErroBanco, ERRO_CHAVE_ESTRANGEIRA, ERRO_UNIQUE } from "../utils/erroBanco"
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export class ClienteService {
-    constructor(private readonly clienteRepository: ClienteRepository) { }
+    constructor(private readonly clienteRepository: ClienteRepository) {}
 
     async cadastrar(dados: NovoCliente): Promise<Cliente> {
         const cliente = this.validar(dados)
@@ -81,7 +77,6 @@ export class ClienteService {
     }
 
     private validarId(id: number): void {
-        if (!Number.isInteger(id) || id <= 0)
-            throw new AppError(`ID inválido`)
+        if (!Number.isInteger(id) || id <= 0) throw new AppError(`ID inválido`)
     }
 }

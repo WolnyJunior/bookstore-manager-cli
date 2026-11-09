@@ -17,7 +17,6 @@ export async function testConnection(): Promise<void> {
 }
 
 export async function executarEmTransacao<T>(acao: (client: PoolClient) => Promise<T>) {
-
     const client = await pool.connect()
     try {
         await client.query("BEGIN")
